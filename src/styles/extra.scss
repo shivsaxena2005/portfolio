@@ -1,0 +1,34 @@
+// Extra motion + hand-made touches, layered on top of main.scss
+$ease: cubic-bezier(.2, .7, .2, 1);
+
+/* cursor ring that trails the pointer and swells over anything clickable */
+.ring { position: fixed; top: -18px; left: -18px; width: 36px; height: 36px; border: 2px solid var(--accent); border-radius: 50%; pointer-events: none; z-index: 100; opacity: 0;
+  transition: opacity .3s, width .25s $ease, height .25s $ease, margin .25s $ease, background .25s;
+  &.on { opacity: 1; }
+  &.hot { width: 62px; height: 62px; margin: -13px 0 0 -13px; background: #ff5a1f30; }
+  @media (pointer: coarse) { display: none; } }
+
+/* hero: orange glow that follows the pointer, over the dotted paper */
+.hero { background-image: radial-gradient(460px circle at var(--mx, 72%) var(--my, 30%), #ff5a1f45, transparent 70%), radial-gradient(var(--line) 1.2px, transparent 1.3px);
+  background-size: auto, 24px 24px; background-attachment: fixed, scroll; }
+
+/* photo tilts toward the pointer (the transform is set from JS) */
+.arch { transition: transform .2s ease-out; will-change: transform;
+  .hand { position: absolute; left: -64px; top: -26px; font-family: 'Caveat', cursive; font-size: 1.9rem; line-height: 1; color: var(--accent); transform: rotate(-9deg); white-space: nowrap; pointer-events: none;
+    &::after { content: '\21B7'; margin-left: 6px; display: inline-block; transform: rotate(18deg) translateY(6px); }
+    @media (max-width: 760px) { left: 0; top: -34px; } } }
+
+/* ticker strip: speeds up its lean with scroll velocity */
+.marquee { overflow: hidden; margin: 8px 0; padding: 14px 0; background: var(--accent); color: #1a0f08; border-block: 2px solid var(--ink); white-space: nowrap;
+  font-family: var(--display); font-weight: 800; font-size: clamp(1.3rem, 3vw, 2.2rem); letter-spacing: -.02em; text-transform: uppercase;
+  transform: skewY(var(--sk, 0deg)); transition: transform .1s linear;
+  .track { display: inline-flex; animation: scroll 36s linear infinite; }
+  &:hover .track { animation-play-state: paused; }
+  span { display: inline-flex; align-items: center; gap: 1.2rem; padding-right: 1.2rem; }
+  b { font-weight: 400; color: var(--bg); } }
+@keyframes scroll { to { transform: translateX(-50%); } }
+
+/* contact / certificates wall gets a printed-stripe texture */
+.sec.wall { background-image: repeating-linear-gradient(135deg, #0000 0 22px, #1a0f0810 22px 24px); }
+
+@media (prefers-reduced-motion: reduce) { .marquee .track { animation: none; } .marquee { transform: none; } }

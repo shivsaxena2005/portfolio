@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Shiv Saxena | AI & ML Portfolio</title>
+
+<!-- Google Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<!-- Font Awesome -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    scroll-behavior:smooth;
+    font-family:'Poppins',sans-serif;
+}
+body{
+    background:linear-gradient(135deg,#0f172a,#1e293b,#111827);
+    color:white;
+}
+header{
+    height:100vh;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    text-align:center;
+    padding:20px;
+}
+.profile-pic{
+    width:170px;
+    height:170px;
+    border-radius:50%;
+    border:4px solid #38bdf8;
+    object-fit:cover;
+    box-shadow:0 0 25px rgba(56,189,248,.7);
+    animation:float 3s ease-in-out infinite;
+}
+@keyframes float{
+    0%,100%{transform:translateY(0);}
+    50%{transform:translateY(-10px);}
+}
+header h1{
+    font-size:3rem;
+    margin-top:20px;
+    color:#38bdf8;
+}
+.typing{
+    font-size:1.3rem;
+    color:#cbd5e1;
+    margin-top:10px;
+}
+nav{
+    margin-top:30px;
+}
+nav a{
+    color:white;
+    margin:0 15px;
+    text-decoration:none;
+    font-weight:500;
+    transition:.3s;
+}
+nav a:hover{
+    color:#38bdf8;
+}
+.btn{
+    display:inline-block;
+    margin-top:25px;
+    padding:12px 25px;
+    background:#38bdf8;
+    color:#0f172a;
+    border-radius:30px;
+    text-decoration:none;
+    font-weight:600;
+    transition:.3s;
+}
+.btn:hover{
+    transform:scale(1.05);
+}
+section{
+    padding:70px 10%;
+}
+.section-title{
+    font-size:2rem;
+    color:#38bdf8;
+    margin-bottom:25px;
+    text-align:center;
+}
+.about-box,.card{
+    background:rgba(255,255,255,.05);
+    padding:25px;
+    border-radius:18px;
+    backdrop-filter:blur(10px);
+    box-shadow:0 8px 25px rgba(0,0,0,.3);
+}
+.skills-grid,.projects-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+    gap:20px;
+}
+.skill{
+    background:#1e293b;
+    padding:15px;
+    border-radius:12px;
+}
+.progress{
+    background:#334155;
+    height:8px;
+    border-radius:10px;
+    margin-top:10px;
+}
+.progress span{
+    display:block;
+    height:100%;
+    border-radius:10px;
+    background:#38bdf8;
+}
+.card h3{
+    color:#38bdf8;
+    margin-bottom:10px;
+}
+.card p{
+    color:#d1d5db;
+    font-size:.95rem;
+}
+.card a{
+    display:inline-block;
+    margin-top:15px;
+    color:#38bdf8;
+    text-decoration:none;
+}
+.timeline{
+    border-left:3px solid #38bdf8;
+    padding-left:20px;
+}
+.timeline-item{
+    margin-bottom:25px;
+}
+.timeline-item h4{
+    color:#38bdf8;
+}
+.contact{
+    text-align:center;
+}
+.contact a{
+    color:#38bdf8;
+    text-decoration:none;
+}
+footer{
+    text-align:center;
+    padding:20px;
+    background:#020617;
+    color:#94a3b8;
+    margin-top:40px;
+}
+@media(max-width:768px){
+    header h1{font-size:2.2rem;}
+    .typing{font-size:1rem;}
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <img src="image.jpeg" class="profile-pic" alt="Shiv Saxena">
+    <h1>Shiv Saxena</h1>
+    <p class="typing"><span id="typed-text"></span></p>
+
+    <nav>
+        <a href="#skills">Skills</a>
+        <a href="#about">About</a>
+        <a href="#projects">Projects</a>
+        <a href="#experience">Experience</a>
+        <a href="#contact">Contact</a>
+    </nav>
+
+    <a href="Resume.pdf" class="btn" target="_blank">Download Resume</a>
+</header>
+
+<!-- About -->
+<section id="about">
+    <h2 class="section-title">About Me</h2>
+    <div class="about-box">
+        <p>
+    I am a passionate <b>4th-year B.Tech student</b> specializing in 
+    <b>Artificial Intelligence & Machine Learning</b>. 
+    Skilled in Python, Flask, Machine Learning, Deep Learning, Data Science, 
+    and Web Development. Currently working as a <b>full-time on-site AI/ML Intern at SpanIdea Systems, Jodhpur</b>. 
+    I enjoy building real-world AI solutions such as crop disease detection, 
+    intelligent image understanding systems, and ML-powered web applications.
+</p>
+    </div>
+</section>
+
+<!-- Skills -->
+<section id="skills">
+    <h2 class="section-title">Technical Skills</h2>
+    <div class="skills-grid">
+
+        <div class="skill">
+            Python
+            <div class="progress"><span style="width:95%"></span></div>
+        </div>
+
+        <div class="skill">
+            Machine Learning
+            <div class="progress"><span style="width:90%"></span></div>
+        </div>
+
+        <div class="skill">
+            Flask / Web Dev
+            <div class="progress"><span style="width:88%"></span></div>
+        </div>
+
+        <div class="skill">
+            TensorFlow / Deep Learning
+            <div class="progress"><span style="width:85%"></span></div>
+        </div>
+
+        <div class="skill">
+            SQL / MySQL
+            <div class="progress"><span style="width:80%"></span></div>
+        </div>
+
+        <div class="skill">
+            Git / GitHub
+            <div class="progress"><span style="width:82%"></span></div>
+        </div>
+
+    </div>
+</section>
+
+<!-- Projects -->
+<section id="projects">
+    <h2 class="section-title">Projects</h2>
+
+    <div class="projects-grid">
+
+        <!-- <div class="card">
+            <h3>Secure Flask App with AI Agent</h3>
+            <p>
+                Secure web portal with login, registration, OTP password reset,
+                AI chatbot, SQLAlchemy database, responsive UI and user verification.
+            </p>
+            <a href="https://secure-flask-app-with-ai-agent-and-user-5z46.onrender.com/" target="_blank">Live Demo</a>
+        </div> -->
+
+        <div class="card">
+            <h3>Agrisense - Crop Disease Detection</h3>
+            <p>
+                CNN-based AI system that detects crop diseases from images,
+                provides diagnosis and includes voice-enabled chatbot support for farmers.
+            </p>
+            <a href="https://github.com/shivsaxena2005/agrisense.git" target="_blank">Check code</a>
+        </div>
+
+        <div class="card">
+            <h3>AI Image Understanding App</h3>
+            <p>
+                Flask-based application that generates titles and descriptions from uploaded images,
+                with authentication and database-backed image storage.
+            </p>
+            <a href="https://github.com/shivsaxena2005/Dream_Team_Tech.git" target="_blank">Check Code</a>
+        </div>
+
+        <div class="card">
+            <h3>ML Model Explorer</h3>
+            <p>
+                Platform to learn and test ML models with trained TensorFlow models,
+                dashboard analytics and user authentication.
+            </p>
+            <a href="https://github.com/shivsaxena2005/-Secure-Flask-App-with-AI-Agent-and-User-Verification.git" target="_blank">Check Code</a>
+        </div>
+
+    </div>
+</section>
+
+<!-- Experience -->
+<section id="experience">
+    <h2 class="section-title">Experience</h2>
+
+    <div class="timeline">
+        <div class="timeline-item">
+    <h4>Intern - SpanIdea Systems</h4>
+    <p>May 2026 - Present</p>
+    <p>
+        Started a full-time on-site internship at SpanIdea Systems, Jodhpur,
+        working on FASTAPI, React, CesiumJs, geospatial systems, and autonomous driving related technologies.
+    </p>
+</div>
+        <div class="timeline-item">
+            <h4>AI & DS Intern - DreamTeam Technologies Pvt. Ltd.</h4>
+            <p>Dec 2025 - Feb 2026</p>
+            <p>Worked on AI-based image understanding applications using Flask and Machine Learning.</p>
+        </div>
+
+        <div class="timeline-item">
+            <h4>Microsoft Azure AI Training (RCAT)</h4>
+            <p>Nov 2025 - Dec 2025</p>
+            <p>Earned 62 badges and 12 trophies by developing AI solutions in Azure.</p>
+        </div>
+
+    </div>
+</section>
+
+<!-- Add this Achievement nav link inside <nav> -->
+<!-- <a href="#achievements">Achievements</a> -->
+
+
+<!-- Add this section after Skills or before Projects -->
+
+<section id="achievements">
+    <h2 class="section-title">Achievements</h2>
+
+    <div class="projects-grid">
+
+        <div class="card">
+            <h3>100/100 in Mathematics</h3>
+            <p>
+                Achieved perfect score of <b>100/100</b> in Mathematics in both Class 10th and 12th board examinations.
+            </p>
+        </div>
+
+        <div class="card">
+            <h3>TFWS Scholarship Seat</h3>
+            <p>
+                Secured admission through <b>Tuition Fee Waiver Scheme (TFWS)</b>, awarded to meritorious students.
+            </p>
+        </div>
+
+        <div class="card">
+            <h3>GATE DA 2026 Qualified</h3>
+            <p>
+                Qualified <b>GATE DA 2026</b> (Data Science & Artificial Intelligence), demonstrating strong technical and analytical skills.
+            </p>
+        </div>
+
+        <div class="card">
+            <h3>TCS CodeVita Round 1 Qualified</h3>
+            <p>
+                Cleared Round 1 of <b>TCS CodeVita</b>, one of the world's largest competitive coding contests.
+            </p>
+        </div>
+
+    </div>
+</section>
+
+<!-- Contact -->
+<section id="contact">
+    <h2 class="section-title">Contact Me</h2>
+
+    <div class="contact">
+        <p><i class="fa-solid fa-phone"></i> 8000424946</p>
+
+        <p><i class="fa-solid fa-envelope"></i> 
+        <a href="mailto:shivsaxena2878@gmail.com">shivsaxena2878@gmail.com</a></p>
+
+        <p><i class="fa-brands fa-linkedin"></i> 
+        <a href="https://linkedin.com/in/shiv-saxena48b817309" target="_blank">LinkedIn Profile</a></p>
+
+        <p><i class="fa-brands fa-github"></i> 
+        <a href="https://github.com/shivsaxena2005" target="_blank">GitHub</a></p>
+
+        <p><i class="fa-solid fa-code"></i> 
+        <a href="https://leetcode.com/u/shivsaxena2878/" target="_blank">LeetCode</a></p>
+
+        <p><i class="fa-solid fa-laptop-code"></i> 
+        <a href="https://www.hackerrank.com/profile/Shivsaxena2878" target="_blank">HackerRank</a></p>
+    </div>
+</section>
+
+<footer>
+    © 2026 Shiv Saxena | Designed with Passion
+</footer>
+
+<script>
+const roles = [
+"AI & ML Developer",
+"Flask Developer",
+"Machine Learning Enthusiast",
+"Data Science Learner",
+"Problem Solver"
+];
+
+let i=0,j=0,current="",isDeleting=false;
+function type(){
+    current = roles[i];
+    document.getElementById("typed-text").textContent = current.substring(0,j);
+
+    if(!isDeleting && j<current.length){
+        j++;
+        setTimeout(type,100);
+    }
+    else if(isDeleting && j>0){
+        j--;
+        setTimeout(type,50);
+    }
+    else{
+        isDeleting=!isDeleting;
+        if(!isDeleting){i=(i+1)%roles.length;}
+        setTimeout(type,800);
+    }
+}
+type();
+</script>
+
+</body>
+</html>
