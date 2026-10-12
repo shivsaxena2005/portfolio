@@ -308,16 +308,21 @@ function Contact() {
     const form = e.target;
     const data = Object.fromEntries(new FormData(form));
     try {
-      // Netlify Forms: plain form post to the site itself, no server or mail password needed
-      const r = await fetch('/', {
+      if (data['bot-field']) { setS('ok'); form.reset(); return; } // honeypot: bots fill this hidden field
+      const url = import.meta.env.VITE_SHEET_URL;
+      if (!url) {
+        setHint('VITE_SHEET_URL is missing from the build. Add it in Netlify and redeploy.');
+        throw 0;
+      }
+      // Google Apps Script saves the message as a row in a Google Sheet and emails it to me
+      const r = await fetch(url, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: new URLSearchParams({ 'form-name': 'contact', ...data }).toString(),
+        headers: { 'Content-Type': 'text/plain' },
+        body: JSON.stringify({ name: data.name, email: data.email, message: data.message }),
       });
-      if (!r.ok) {
-        setHint(r.status === 404 || r.status === 405
-          ? 'The form only works on the deployed Netlify site, not on your local computer.'
-          : `Server replied with status ${r.status}.`);
+      const out = await r.json().catch(() => ({}));
+      if (!r.ok || !out.ok) {
+        setHint(out.error || `Google script replied with status ${r.status}.`);
         throw 0;
       }
       setS('ok'); form.reset();
