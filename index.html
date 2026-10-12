@@ -12,6 +12,13 @@
     <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&family=Caveat:wght@600&family=Hind:wght@400;500;600&display=swap" rel="stylesheet" />
   </head>
   <body>
+    <!-- Netlify Forms reads this hidden form at deploy time so it knows the fields. The React form in App.jsx posts to it. -->
+    <form name="contact" data-netlify="true" netlify-honeypot="bot-field" hidden>
+      <input name="name" />
+      <input name="email" />
+      <textarea name="message"></textarea>
+      <input name="bot-field" />
+    </form>
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
   </body>

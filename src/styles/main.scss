@@ -123,6 +123,9 @@ main { counter-reset: s; }
 .stack { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 36px 32px;
   dt { font-family: var(--mono); font-size: .8rem; font-weight: 400; letter-spacing: .1em; text-transform: uppercase; color: var(--accent); padding-bottom: 10px; margin-bottom: 12px; border-bottom: 2px solid var(--ink); }
   dd { font-size: 1.3rem; line-height: 1.55; span { transition: color .2s, background .2s; &:hover { background: var(--pop); color: #16130f; } } } }
+.poc { font: inherit; color: inherit; text-decoration: underline dotted var(--accent) 2px; text-underline-offset: 5px; cursor: zoom-in; transition: color .2s, background .2s;
+  &:hover { background: var(--pop); color: #16130f; } }
+.poc-hint { margin-top: 28px; }
 
 /* ---------- experience ---------- */
 .job { display: grid; grid-template-columns: 230px 1fr; gap: 6px 24px; padding: 24px 0; border-top: 1.5px solid var(--line);
@@ -171,9 +174,9 @@ main { counter-reset: s; }
     span { writing-mode: vertical-rl; transform: rotate(180deg); letter-spacing: .25em; font-family: var(--mono); font-size: .8rem; color: #6b6455; } }
   &:hover .stub { background: var(--pop); span { color: #16130f; } } }
 
-.lightbox { position: fixed; inset: 0; z-index: 120; background: #000c; display: grid; place-items: center; padding: var(--pad-x); animation: fade .3s;
-  img { max-width: min(100%, 1100px); max-height: 100%; border-radius: 10px; box-shadow: 0 20px 80px #000a; }
-  button { position: absolute; top: 20px; right: var(--pad-x); padding: 8px 18px; border-radius: 99px; background: var(--pop); color: #16130f; font-family: var(--mono); font-size: .85rem; } }
+.lightbox { position: fixed; inset: 0; z-index: 120; background: #000d; display: flex; padding: 72px var(--pad-x) 40px; overflow: auto; animation: fade .3s; cursor: zoom-out;
+  img { display: block; margin: auto; width: auto; max-width: 100%; height: auto; max-height: none; border-radius: 10px; box-shadow: 0 20px 80px #000a; cursor: default; }
+  button { position: fixed; top: 20px; right: var(--pad-x); padding: 8px 18px; border-radius: 99px; background: var(--pop); color: #16130f; font-family: var(--mono); font-size: .85rem; } }
 @keyframes fade { from { opacity: 0; } }
 
 /* ---------- repos ---------- */

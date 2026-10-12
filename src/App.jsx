@@ -1,10 +1,10 @@
 import { Fragment, useEffect, useRef, useState } from 'react';
-import { projects, jobs, stack, wins, certs, education, roles } from './data.js';
+import { projects, jobs, stack, wins, certs, education, roles, pocs, featuredRepos } from './data.js';
 
 const GH = 'shivsaxena2005';
 const NAV = [
   ['work', 'Work'],
-  ['stack', 'Tools'],
+  ['stack', 'Skills'],
   ['path', 'Experience'],
   ['edu', 'Education'],
   ['certs', 'Certificates'],
@@ -147,7 +147,7 @@ function Projects() {
                 <h4>How it works</h4>
                 <p className="theory">{p.theory}</p>
                 <p className="built"><b>Built with</b> {p.stack.join(', ')}</p>
-                <a className="src" href={p.link} target="_blank" rel="noreferrer">View source on GitHub</a>
+                {p.link && <a className="src" href={p.link} target="_blank" rel="noreferrer">View source on GitHub</a>}
               </div></div>
             </article>
           );
@@ -158,17 +158,41 @@ function Projects() {
 }
 
 function Stack() {
+  const [view, setView] = useState(null);
+  useEffect(() => {
+    if (!view) return;
+    const esc = (e) => e.key === 'Escape' && setView(null);
+    window.addEventListener('keydown', esc);
+    return () => window.removeEventListener('keydown', esc);
+  }, [view]);
+
   return (
-    <dl className="stack">
-      {Object.entries(stack).map(([group, items]) => (
-        <div className="grp" key={group}>
-          <dt>{group}</dt>
-          <dd>{items.map((x, i) => (
-            <Fragment key={x}><span>{x}</span>{i < items.length - 1 ? ', ' : ''}</Fragment>
-          ))}</dd>
+    <>
+      <dl className="stack">
+        {Object.entries(stack).map(([group, items]) => (
+          <div className="grp" key={group}>
+            <dt>{group}</dt>
+            <dd>{items.map((x, i) => (
+              <Fragment key={x}>
+                {pocs[x] ? (
+                  <button className="poc" title={`View ${x} proof of concept`} onClick={() => setView({ src: encodeURI(`/${pocs[x]}`), title: `${x} proof of concept` })}>{x}</button>
+                ) : (
+                  <span>{x}</span>
+                )}
+                {i < items.length - 1 ? ', ' : ''}
+              </Fragment>
+            ))}</dd>
+          </div>
+        ))}
+      </dl>
+      <p className="note poc-hint">Tip: skills with a dotted underline open a proof of concept.</p>
+      {view && (
+        <div className="lightbox" role="dialog" aria-modal="true" aria-label={view.title} onClick={() => setView(null)}>
+          <img src={view.src} alt={view.title} onClick={(e) => e.stopPropagation()} />
+          <button aria-label="Close" onClick={() => setView(null)}>Close</button>
         </div>
-      ))}
-    </dl>
+      )}
+    </>
   );
 }
 
@@ -252,8 +276,14 @@ function Certs() {
 function Repos() {
   const [repos, setRepos] = useState(null);
   useEffect(() => {
-    fetch(`https://api.github.com/users/${GH}/repos?sort=updated&per_page=6`)
-      .then((r) => r.json()).then((d) => setRepos(Array.isArray(d) ? d.filter((_, i) => i === 2 || i === 5) : [])).catch(() => setRepos([]));
+    fetch(`https://api.github.com/users/${GH}/repos?sort=updated&per_page=${featuredRepos.length ? 100 : 6}`)
+      .then((r) => r.json())
+      .then((d) => {
+        if (!Array.isArray(d)) return setRepos([]);
+        // Pinned names win; with none pinned, fall back to the 3rd and 6th most recent.
+        setRepos(featuredRepos.length ? featuredRepos.map((n) => d.find((r) => r.name === n)).filter(Boolean) : d.filter((_, i) => i === 2 || i === 5));
+      })
+      .catch(() => setRepos([]));
   }, []);
   if (!repos) return <p className="note">Loading repositories from GitHub.</p>;
   if (!repos.length) return <p className="note">GitHub didn't respond. Try again in a minute, or open github.com/{GH}.</p>;
@@ -271,30 +301,46 @@ function Repos() {
 
 function Contact() {
   const [s, setS] = useState('idle');
+  const [hint, setHint] = useState('');
   const send = async (e) => {
     e.preventDefault();
-    setS('sending');
-    const data = Object.fromEntries(new FormData(e.target));
+    setS('sending'); setHint('');
+    const form = e.target;
+    const data = Object.fromEntries(new FormData(form));
     try {
-      const r = await fetch('/api/contact', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) });
-      if (!r.ok) throw 0;
-      setS('ok'); e.target.reset();
-    } catch { setS('err'); }
+      // Netlify Forms: plain form post to the site itself, no server or mail password needed
+      const r = await fetch('/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: new URLSearchParams({ 'form-name': 'contact', ...data }).toString(),
+      });
+      if (!r.ok) {
+        setHint(r.status === 404 || r.status === 405
+          ? 'The form only works on the deployed Netlify site, not on your local computer.'
+          : `Server replied with status ${r.status}.`);
+        throw 0;
+      }
+      setS('ok'); form.reset();
+    } catch (err) {
+      if (err === 0) { setS('err'); return; }
+      setHint('Could not reach the server. Check your internet connection.'); setS('err');
+    }
   };
   return (
     <>
       <p className="big">Got a project, an internship or a question? Write to me and I'll reply by email.</p>
-      <form onSubmit={send} className="form">
+      <form onSubmit={send} className="form" name="contact">
+        <input name="bot-field" tabIndex={-1} autoComplete="off" aria-hidden="true" style={{ position: 'absolute', left: '-9999px' }} />
         <input name="name" placeholder="Your name" aria-label="Your name" required />
         <input name="email" type="email" placeholder="Your email" aria-label="Your email" required />
         <textarea name="message" rows="4" placeholder="What are you building?" aria-label="Message" required />
         <button disabled={s === 'sending'}>{s === 'sending' ? 'Sending' : 'Send message'}</button>
         {s === 'ok' && <p className="msg" role="status">Message sent. I'll reply by email.</p>}
-        {s === 'err' && <p className="msg" role="alert">The message didn't send. Email me at shivsaxena2878@gmail.com instead.</p>}
+        {s === 'err' && <p className="msg" role="alert">The message didn't send. Email me at shivsaxena2878@gmail.com instead.{hint && <><br /><small>Reason: {hint}</small></>}</p>}
       </form>
       <ul className="links">
         <li><a href="mailto:shivsaxena2878@gmail.com">Email</a></li>
-        <li><a href="https://linkedin.com/in/shiv-saxena48b817309" target="_blank" rel="noreferrer">LinkedIn</a></li>
+        <li><a href="https://www.linkedin.com/in/shiv-saxena-48b817309" target="_blank" rel="noreferrer">LinkedIn</a></li>
         <li><a href={`https://github.com/${GH}`} target="_blank" rel="noreferrer">GitHub</a></li>
         <li><a href="https://leetcode.com/u/shivsaxena2878/" target="_blank" rel="noreferrer">LeetCode</a></li>
         <li><a href="https://www.hackerrank.com/profile/Shivsaxena2878" target="_blank" rel="noreferrer">HackerRank</a></li>
@@ -303,7 +349,7 @@ function Contact() {
   );
 }
 
-const TICKER = ['AI / ML', 'React', 'Node.js', 'FastAPI', 'TensorFlow', 'Flask', 'GATE DA 2026', 'Jodhpur'];
+const TICKER = ['AI / ML', 'React', 'Node.js', 'FastAPI', 'TensorFlow', 'Flask', 'GATE DA 2026'];
 const fine = () => !matchMedia('(pointer: coarse), (prefers-reduced-motion: reduce)').matches;
 
 /* Pointer effects: hero glow, photo tilt, buttons that lean toward the cursor */
@@ -405,10 +451,10 @@ export default function App() {
           <div className="hero-copy">
             <p className="status"><i aria-hidden="true" />Open to work. Based in Jodhpur, where it's <b>{time}</b>.</p>
             <Name />
-            <p className="role">Currently a <span key={role}>{role}</span></p>
+            <p className="role">I'm <span key={role}>{role}</span></p>
             <p className="lede">Final-year B.Tech student (AI &amp; ML) interning at SpanIdea Systems. I train models, but lately I'm happiest shipping React interfaces and Node backends around them.</p>
             <div className="actions">
-              <a className="btn solid" href="/Resume.pdf" target="_blank" rel="noreferrer">Download résumé</a>
+              <a className="btn solid" href="/Resume.pdf" target="_blank" rel="noreferrer">Download resume</a>
               <a className="btn" href="mailto:shivsaxena2878@gmail.com">Email me</a>
             </div>
           </div>
@@ -424,7 +470,7 @@ export default function App() {
 
       <main>
         <Section id="work" title="Work"><Projects /></Section>
-        <Section id="stack" title="Tools" tone="soft"><Stack /></Section>
+        <Section id="stack" title="Skills" tone="soft"><Stack /></Section>
         <Section id="path" title="Experience"><Experience /></Section>
         <Section id="edu" title="Education" tone="soft"><Education /></Section>
         <Section id="certs" title="Certificates" tone="wall"><Certs /></Section>
