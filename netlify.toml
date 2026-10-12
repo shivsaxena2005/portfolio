@@ -3,5 +3,5 @@
   publish = "dist"
 
   [build.environment]
-    # Only matters if old MAIL_USER / PORT variables are still set in Netlify. Safe to leave.
-    SECRETS_SCAN_OMIT_KEYS = "MAIL_USER,PORT"
+    # The Google Apps Script URL ends up in the public JS bundle on purpose.
+    SECRETS_SCAN_OMIT_KEYS = "MAIL_USER,PORT,VITE_SHEET_URL"

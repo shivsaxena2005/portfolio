@@ -308,15 +308,21 @@ function Contact() {
     const form = e.target;
     const data = Object.fromEntries(new FormData(form));
     try {
-      // Sends straight to my Gmail through the /api/contact function (Netlify) or server/index.js (local)
-      const r = await fetch('/api/contact', {
+      if (data['bot-field']) { setS('ok'); form.reset(); return; } // honeypot: bots fill this hidden field
+      const url = import.meta.env.VITE_SHEET_URL;
+      if (!url) {
+        setHint('VITE_SHEET_URL is missing from the build. Add it in Netlify and redeploy.');
+        throw 0;
+      }
+      // Google Apps Script saves the message as a row in a Google Sheet and emails it to me
+      const r = await fetch(url, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data),
+        headers: { 'Content-Type': 'text/plain' },
+        body: JSON.stringify({ name: data.name, email: data.email, message: data.message }),
       });
-      if (!r.ok) {
-        const body = await r.json().catch(() => ({}));
-        setHint(body.hint || `Server replied with status ${r.status}.`);
+      const out = await r.json().catch(() => ({}));
+      if (!r.ok || !out.ok) {
+        setHint(out.error || `Google script replied with status ${r.status}.`);
         throw 0;
       }
       setS('ok'); form.reset();
