@@ -308,16 +308,15 @@ function Contact() {
     const form = e.target;
     const data = Object.fromEntries(new FormData(form));
     try {
-      // Netlify Forms: plain form post to the site itself, no server or mail password needed
-      const r = await fetch('/', {
+      // Sends straight to my Gmail through the /api/contact function (Netlify) or server/index.js (local)
+      const r = await fetch('/api/contact', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: new URLSearchParams({ 'form-name': 'contact', ...data }).toString(),
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
       });
       if (!r.ok) {
-        setHint(r.status === 404 || r.status === 405
-          ? 'The form only works on the deployed Netlify site, not on your local computer.'
-          : `Server replied with status ${r.status}.`);
+        const body = await r.json().catch(() => ({}));
+        setHint(body.hint || `Server replied with status ${r.status}.`);
         throw 0;
       }
       setS('ok'); form.reset();
